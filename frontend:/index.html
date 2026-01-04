@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clinic Appointment Assistant</title>
+  <style>
+    body { font-family: Arial; }
+    #chat { width: 350px; border: 1px solid #ccc; padding: 10px; }
+    #messages { height: 300px; overflow-y: auto; }
+    input { width: 75%; }
+  </style>
+</head>
+<body>
+
+<h3>Appointment Assistant</h3>
+
+<div id="chat">
+  <div id="messages"></div>
+  <input id="input" placeholder="Type here..." />
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+const API_URL = "REPLACE_WITH_RENDER_URL/chat";
+
+async function send() {
+  const input = document.getElementById("input");
+  const msg = input.value;
+  input.value = "";
+
+  document.getElementById("messages").innerHTML += `<p><b>You:</b> ${msg}</p>`;
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({message: msg})
+  });
+
+  const data = await res.json();
+  document.getElementById("messages").innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
+}
+</script>
+
+</body>
+</html>
